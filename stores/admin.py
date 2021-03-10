@@ -4,7 +4,9 @@ from django.contrib import admin
 from .models import Store, Domain
 from . import utils
 
-admin.site.register(Domain)
+@admin.register(Domain)
+class DomainAdmin(admin.ModelAdmin):
+    list_display('name','count_of_companies')
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
