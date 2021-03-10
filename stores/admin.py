@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 
 # Register your models here.
 from .models import Store, Domain
@@ -6,7 +7,22 @@ from . import utils
 
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
-    list_display=('name','count_of_companies')
+    list_display = ('name', 'company_count')
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(
+            _company_count=Count('store', distinct=True)
+        )
+        return queryset
+
+    def company_count(self, obj):
+        return obj._company_count
+
+    company_count.admin_order_field = '_company_count'
+
+#    def company_count(self, obj):
+#        return obj.store_set.count()
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
