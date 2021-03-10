@@ -14,8 +14,7 @@ SECRET_KEY = '#cl*&w)1&0_tkd!%9p_*imvh)9vj(j+r$txm2ur)=b+sf)h8jk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [secrets.DEVBOX_IP,]
 
 # Application definition
 
