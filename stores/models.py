@@ -39,7 +39,7 @@ class Domain(models.Model):
 
     @property
     def count_of_companies(self):
-        return Domain.objects.filter(name=self.name).count()
+        return Store.objects.filter(domain=self).count()
 
     def __str__(self):
         return self.name
