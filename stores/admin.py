@@ -6,7 +6,7 @@ from . import utils
 
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
-    list_display('name','count_of_companies')
+    list_display=('name','count_of_companies')
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
