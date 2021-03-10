@@ -1,5 +1,9 @@
 import googlemaps
+import requests
 from locations import secrets
+import logging
+
+logger = logging.getLogger(__file__)
 
 PLACES_API_KEY=secrets.PLACES_API_KEY
 
@@ -46,3 +50,29 @@ def queryset_to_unique_domain_list(queryset):
         except:
             pass
     return unique(domain_list)
+
+def hunterio_lookup(domain):
+    from crm.models import leads
+    data = {
+        'domain': domain.name,
+        'api_key': secrets.HUNTERIO_API_KEY,
+        'limit': 100,
+        'type': 'personal',
+    }
+    r = requests.get("https://api.hunter.io/v2/domain-search", params=data)
+    hunter_data = r.json()
+    hunter_data = hunter_data.get("data")
+    emails = hunter_data.get("emails", [])
+    logger.info(emails)
+    for email in emails:
+        lead, created = leads.objects.update_or_create(
+            email=email.get("value"),
+            defaults={
+                'firstname': email.get('first_name', ''),
+                'lastname': email.get('last_name', ''),
+                'position': email.get('position', ''),
+                'company': domain.name,
+                'points': len(email.get('sources', []))
+            }
+        )
+    return len(emails)

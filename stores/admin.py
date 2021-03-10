@@ -8,6 +8,7 @@ from . import utils
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
     list_display = ('name', 'company_count')
+    actions = ['get_emails_at_domain',]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -21,8 +22,16 @@ class DomainAdmin(admin.ModelAdmin):
 
     company_count.admin_order_field = '_company_count'
 
-#    def company_count(self, obj):
-#        return obj.store_set.count()
+    def get_emails_at_domain(self, request, queryset):
+        for query in queryset[:99]:
+            try:
+                result = utils.hunterio_lookup(query)
+                if not result:
+                    raise Exception("No or Multiple Results Found")
+            except Exception as e:
+                print(e)
+
+    get_emails_at_domain.short_description = "Look Up in Hunter.IO"
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
