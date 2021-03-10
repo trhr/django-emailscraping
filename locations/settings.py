@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'stores',
     'csvimport.app.CSVImportConf',
     'frontend',
+    'crm',
 ]
 
 MIDDLEWARE = [
