@@ -37,5 +37,8 @@ class Store(models.Model):
 class Domain(models.Model):
     name = models.CharField(max_length=63, primary_key=True)
 
+    def count_of_companies(self):
+        return Domain.objects.filter(name=self.name).count()
+
     def __str__(self):
         return self.name
