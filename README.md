@@ -1,6 +1,15 @@
 # Documentation for Use of the Limitless Interactive Flywheel Techstack
 The LIFT is a custom application built in Django 3.1 intended to convert a list of street addresses into a list of email addresses.
 
+0. **Create secrets.py next to settings.py**
+    - DATABASE_PASS=
+    - DATABASE_USER=
+    - DATABASE_HOST=
+    - PLACES_API_KEY=
+    - DEVBOX_IP=
+    - HUNTERIO_API_KEY=
+    - DEBOUNCE_API_KEY=
+
 1. **Place the street addresses in a .csv file with the following column headers:**
 
     - name,address_line_1,address_line_2,city,state,postcode,phone,url
