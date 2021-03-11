@@ -1,20 +1,22 @@
-from django.contrib import admin
-import requests
+"""
+ Checks validity of an email
+"""
 
-from .models import leads
-from locations import secrets
-
+from django.core.management.base import BaseCommand, CommandError
 import logging
+import requests
+from locations import secrets
+from crm.models import leads
 
 logger = logging.getLogger(__file__)
 
-@admin.register(leads)
-class LeadsAdmin(admin.ModelAdmin):
-    list_display=('email','company', 'points', 'stage_id')
-    actions=['debounce_verification',]
-    list_filter=('stage_id', 'points')
 
-    def debounce_verification(self, request, queryset):
+class Command(BaseCommand):
+    help = "Checks validity of an email"
+
+    def handle(self, *args, **options):
+        queryset = leads.objects.filter(stage_id__isnull=True)
+
         for query in queryset:
             try:
                 data = {
@@ -38,4 +40,3 @@ class LeadsAdmin(admin.ModelAdmin):
                 query.save()
             except Exception as e:
                 logger.warning(e)
-
